@@ -1,0 +1,47 @@
+<configuration debug="false">
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}  [RequestId: %X{RequestId}] [%X{consumer_id}] [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--<appender name="REQUEST-RESPONSE-FILE-ASYNC"
+              class="ch.qos.logback.classic.AsyncAppender">
+        &lt;!&ndash;  <discardingThreshold>0</discardingThreshold> default 20, means drop lower event when has 20% capacity remaining &ndash;&gt;
+        <appender-ref ref="REQUEST-FILE" />
+        <queueSize>500</queueSize> &lt;!&ndash; default 256 &ndash;&gt;
+        <includeCallerData>false</includeCallerData>&lt;!&ndash; default false &ndash;&gt;
+        <neverBlock>true</neverBlock>&lt;!&ndash; default false, set to true to cause
+            the Appender not block the application and just drop the messages &ndash;&gt;
+    </appender>
+-->
+    <appender name="KAFKA-LOGS" class="ch.qos.logback.core.FileAppender">
+        <file>./logs/tick-price-monitor/kafka_log.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}  [RequestId: %X{RequestId}] [%X{consumer_id}] [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="HEALTH-LOGS" class="ch.qos.logback.core.FileAppender">
+        <file>./logs/tick-price-monitor/health_log.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}  [RequestId: %X{RequestId}] [%X{consumer_id}] [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="console" />
+    </root>
+
+    <logger name="org.springframework.kafka" level="INFO" additivity="false">
+        <appender-ref ref="KAFKA-LOGS"/>
+    </logger>
+    <logger name="org.springframework.boot.actuate.health" level="INFO" additivity="false">
+        <appender-ref ref="HEALTH-LOGS"/>
+    </logger>
+
+</configuration>
